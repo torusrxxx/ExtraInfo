@@ -14,7 +14,7 @@
 #define DLL_EXPORT extern "C" __declspec(dllexport)
 #endif //DLL_EXPORT
 
-#define plugin_name "XrefInfo"
+#define plugin_name "ExtraInfo"
 #define plugin_version 1
 
 int pluginHandle;
