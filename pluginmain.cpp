@@ -48,7 +48,8 @@ void cbPlugin(CBTYPE cbType, LPVOID generic_param)
             std::string output;
             std::qsort(info.references, info.refcount, sizeof(info.references[0]), &compareFunc);
             int t = -1;
-            for(int i = 0; i < info.refcount; i++)
+            int i;
+            for(i = 0; i < info.refcount && i < 10; i++)
             {
                 if(t != info.references[i].type)
                 {
@@ -71,11 +72,20 @@ void cbPlugin(CBTYPE cbType, LPVOID generic_param)
                 ADDRINFO label;
                 label.flags = flaglabel;
                 _dbg_addrinfoget(info.references[i].addr, SEG_DEFAULT, &label);
-                output += label.label;
+                if(label.label[0] != '\0')
+                    output += label.label;
+                else{
+                    char temp[18];
+                    sprintf_s(temp, "%p", info.references[i].addr);
+                    output += temp;
+                }
                 if(i != info.refcount - 1)
                     output += ",";
             }
+            if(info.refcount > 10)
+                output += " ...";
             GuiAddInfoLine(output.c_str());
+            BridgeFree(info.references);
         }
     }
 }
