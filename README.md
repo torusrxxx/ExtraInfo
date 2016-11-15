@@ -1,4 +1,6 @@
 # ExtraInfo
+This is an [x64dbg](https://github.com/x64dbg/x64dbg) plugin.
+
 Add More Information in the info box
 
 ![Screenshot of ExtraInfo](https://cloud.githubusercontent.com/assets/15761310/20271697/836914fc-aa83-11e6-8dc1-8335579ebc71.png)
