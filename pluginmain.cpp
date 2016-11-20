@@ -68,14 +68,17 @@ void cbPlugin(CBTYPE cbType, LPVOID generic_param)
         if(DbgXrefGet(param->VA, &info) && info.refcount > 0)
         {
             std::string output;
-            std::qsort(info.references, info.refcount, sizeof(info.references[0]), &compareFunc);
+            XREF_RECORD* data;
+            data = new XREF_RECORD[info.refcount];
+            memcpy(data, info.references, info.refcount * sizeof(XREF_RECORD));
+            std::qsort(data, info.refcount, sizeof(info.references[0]), &compareFunc);
             int t = XREF_NONE;
             duint i;
             for(i = 0; i < info.refcount && i < 10; i++)
             {
-                if(t != info.references[i].type)
+                if(t != data[i].type)
                 {
-                    switch(info.references[i].type)
+                    switch(data[i].type)
                     {
                     case XREF_JMP:
                         output += LoadUTF8String(IDS_JMPFROM);
@@ -87,27 +90,28 @@ void cbPlugin(CBTYPE cbType, LPVOID generic_param)
                         output += LoadUTF8String(IDS_REFFROM);
                         break;
                     }
-                    t = info.references[i].type;
+                    t = data[i].type;
                 }
                 ADDRINFO label;
                 label.flags = flaglabel;
-                _dbg_addrinfoget(info.references[i].addr, SEG_DEFAULT, &label);
+                _dbg_addrinfoget(data[i].addr, SEG_DEFAULT, &label);
                 if(label.label[0] != '\0')
                     output += label.label;
                 else{
                     char temp[18];
-                    sprintf_s(temp, "%p", info.references[i].addr);
+                    sprintf_s(temp, "%p", data[i].addr);
                     output += temp;
                 }
                 if(i != info.refcount - 1)
                     output += ",";
             }
+            delete[] data;
             if(info.refcount > 10)
                 output += " ...";
             GuiAddInfoLine(output.c_str());
-            if(info.references)
-                BridgeFree(info.references);
         }
+        if(info.refcount != 0)
+            BridgeFree(info.references);
     }
 }
 
