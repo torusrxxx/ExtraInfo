@@ -126,6 +126,7 @@ DLL_EXPORT bool pluginit(PLUG_INITSTRUCT* initStruct)
 
 DLL_EXPORT bool plugstop()
 {
+    _plugin_unregistercallback(pluginHandle, CB_SELCHANGED);
     return true;
 }
 
