@@ -1,3 +1,5 @@
+**Important: This plugin has been deprecated because it is now a core feature of x64dbg. Please use newer versions of x64dbg directly.**
+
 # ExtraInfo
 This is an [x64dbg](https://github.com/x64dbg/x64dbg) plugin.
 
